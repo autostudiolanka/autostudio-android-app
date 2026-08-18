@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/primitives/Button";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/_authenticated/home")({
+export const Route = createFileRoute("/_authenticated/_tabs/home")({
   head: () => ({
     meta: [
       { title: "You're in — AutoStudio Lanka" },

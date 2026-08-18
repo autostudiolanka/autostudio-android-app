@@ -13,7 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as DesignRouteImport } from './routes/design'
 import { Route as SigninRouteImport } from './routes/signin'
-import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedTabsHomeRouteImport } from './routes/_authenticated/_tabs/home'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,8 +34,8 @@ const SigninRoute = SigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
-  id: '/home',
+const AuthenticatedTabsHomeRoute = AuthenticatedTabsHomeRouteImport.update({
+  id: '/_tabs/home',
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
@@ -44,13 +44,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/design': typeof DesignRoute
   '/signin': typeof SigninRoute
-  '/home': typeof AuthenticatedHomeRoute
+  '/home': typeof AuthenticatedTabsHomeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/design': typeof DesignRoute
   '/signin': typeof SigninRoute
-  '/home': typeof AuthenticatedHomeRoute
+  '/home': typeof AuthenticatedTabsHomeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,7 +58,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/design': typeof DesignRoute
   '/signin': typeof SigninRoute
-  '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/_tabs/home': typeof AuthenticatedTabsHomeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -71,7 +71,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/design'
     | '/signin'
-    | '/_authenticated/home'
+    | '/_authenticated/_tabs/home'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -111,22 +111,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/home': {
-      id: '/_authenticated/home'
+    '/_authenticated/_tabs/home': {
+      id: '/_authenticated/_tabs/home'
       path: '/home'
       fullPath: '/home'
-      preLoaderRoute: typeof AuthenticatedHomeRouteImport
+      preLoaderRoute: typeof AuthenticatedTabsHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedTabsHomeRoute: typeof AuthenticatedTabsHomeRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedTabsHomeRoute: AuthenticatedTabsHomeRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
