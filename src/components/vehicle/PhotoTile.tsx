@@ -54,7 +54,7 @@ export function PhotoTile({ slot, index }: { slot: VehicleSlot; index: number })
         )}
         style={
           slot.state === "done"
-            ? { textShadow: "var(--elevation-icon)" }
+            ? { textShadow: "var(--shadow-icon)" }
             : undefined
         }
       >
