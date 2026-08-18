@@ -458,3 +458,29 @@
   }
 }
 
+
+@utility tab-item {
+  position: relative;
+  min-height: var(--size-touch);
+  -webkit-tap-highlight-color: transparent;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-tab);
+    background-color: transparent;
+    transition: background-color var(--motion-pill-press-duration) ease-out;
+    pointer-events: none;
+  }
+
+  &:active::after {
+    background-color: var(--tab-press-overlay);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-item::after {
+    transition: none;
+  }
+}
