@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { ChevronLeft, ImageOff, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/primitives/Button";
@@ -33,6 +33,7 @@ function formatDate(value: string): string {
 
 function VehicleScreen() {
   const router = useRouter();
+  const navigate = useNavigate();
   const { vehicleId } = Route.useParams();
   const query = useQuery({
     queryKey: ["vehicle", vehicleId],
@@ -79,6 +80,9 @@ function VehicleScreen() {
         <button
           type="button"
           aria-label="More options"
+          onClick={() =>
+            navigate({ to: "/vehicle-info/$vehicleId", params: { vehicleId } })
+          }
           className="press flex shrink-0 items-center justify-center bg-raised text-sheet"
           style={{
             height: "var(--size-icon-button)",
