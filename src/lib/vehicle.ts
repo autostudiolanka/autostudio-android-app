@@ -111,19 +111,56 @@ type RawSlot = {
   errorMessage?: string | null;
 };
 
-function buildSlots(value: unknown): VehicleSlot[] {
+type RawPair = {
+  slotId?: string | null;
+  originalUrl?: string | null;
+  processedUrl?: string | null;
+  showProcessed?: boolean | null;
+  processing?: boolean | null;
+};
+
+function pairUrl(pair: RawPair): string | null {
+  const url = (pair.showProcessed && pair.processedUrl) || pair.processedUrl || pair.originalUrl;
+  return url && url.length > 0 ? url : null;
+}
+
+function buildSlots(
+  value: unknown,
+  pairsValue: unknown,
+  manualUrls: string[] | null,
+): VehicleSlot[] {
   const raw: RawSlot[] = Array.isArray(value) ? (value as RawSlot[]) : [];
   const bySlot = new Map(raw.filter((s) => s.slotId).map((s) => [s.slotId as string, s]));
 
+  // Photos published from the web app live on published_vehicles, not car_jobs.slots.
+  const pairs: RawPair[] = Array.isArray(pairsValue) ? (pairsValue as RawPair[]) : [];
+  const pairBySlot = new Map<string, RawPair>();
+  const loosePairUrls: string[] = [];
+  for (const pair of pairs) {
+    const url = pairUrl(pair);
+    if (!url) continue;
+    if (pair.slotId && !pairBySlot.has(pair.slotId)) pairBySlot.set(pair.slotId, pair);
+    else loosePairUrls.push(url);
+  }
+  if (pairs.length === 0) {
+    for (const url of manualUrls ?? []) if (url) loosePairUrls.push(url);
+  }
+  let looseIndex = 0;
+
   return SLOT_ORDER.map(({ slotId, label }) => {
     const slot = bySlot.get(slotId);
-    const url = slot?.processedUrl || slot?.previewUrl || null;
+    const pair = pairBySlot.get(slotId);
+    let url = slot?.processedUrl || slot?.previewUrl || (pair ? pairUrl(pair) : null) || null;
+    const processing = pair?.processing === true;
 
     let state: SlotState = "empty";
     if (slot?.errorMessage) state = "error";
-    else if (slot?.processingState === "processing" || slot?.processingState === "queued")
+    else if (slot?.processingState === "processing" || slot?.processingState === "queued" || processing)
       state = "processing";
-    else if (url) state = "done";
+    else {
+      if (!url && looseIndex < loosePairUrls.length) url = loosePairUrls[looseIndex++]!;
+      if (url) state = "done";
+    }
 
     return { slotId, label, url: state === "done" ? url : null, state };
   });
@@ -141,12 +178,16 @@ export async function fetchVehicle(vehicleId: string): Promise<VehicleDetail | n
 
   const { data: published, error: publishedError } = await supabase
     .from("published_vehicles")
-    .select("is_published, published_at, imaging_status")
+    .select("is_published, published_at, imaging_status, manual_photo_pairs, manual_photo_urls")
     .eq("car_job_id", vehicleId)
     .maybeSingle();
   if (publishedError) throw publishedError;
 
-  const slots = buildSlots(job.slots);
+  const slots = buildSlots(
+    job.slots,
+    published?.manual_photo_pairs,
+    published?.manual_photo_urls ?? null,
+  );
 
   return {
     id: job.id,
