@@ -395,6 +395,10 @@
   animation-delay: calc(var(--pulse-index, 0) * var(--motion-pulse-stagger));
 }
 
+@utility slide-up-screen {
+  animation: slide-up-screen var(--motion-slide-up-duration) var(--motion-slide-up-ease) both;
+}
+
 @utility spinner {
   border: var(--spinner-ring-width) solid currentColor;
   border-top-color: transparent;
