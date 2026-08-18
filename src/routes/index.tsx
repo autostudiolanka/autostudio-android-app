@@ -1,334 +1,151 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState, type FormEvent } from "react";
 
 import { Button } from "@/components/primitives/Button";
-import { FilterPill } from "@/components/primitives/FilterPill";
-import { MetadataChip } from "@/components/primitives/MetadataChip";
-import { StatusChip } from "@/components/primitives/StatusChip";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Design System — Stock & Enquiries App" },
+      { title: "Sign in — AutoStudio Lanka" },
       {
         name: "description",
         content:
-          "Token reference and interactive primitives: buttons, status chips, metadata chips and filter pills at 390px.",
+          "Sign in to manage your dealership stock and buyer enquiries on the go.",
       },
-      { property: "og:title", content: "Design System — Stock & Enquiries App" },
+      { property: "og:title", content: "Sign in — AutoStudio Lanka" },
       {
         property: "og:description",
-        content: "Token reference and interactive primitives for the mobile app.",
+        content: "Dealer sign-in for managing stock and enquiries.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: DesignSystemDemo,
+  component: SignInScreen,
 });
 
-const COLOR_TOKENS = [
-  "--ground",
-  "--raised",
-  "--raised-2",
-  "--sheet",
-  "--surface",
-  "--surface-2",
-  "--border",
-  "--border-strong",
-  "--text",
-  "--text-2",
-  "--muted",
-  "--muted-dark",
-  "--muted-ground",
-  "--placeholder",
-  "--primary",
-  "--primary-on-ground",
-  "--accent-soft",
-  "--destructive",
-  "--done-bg",
-  "--done-fg",
-  "--processing-bg",
-  "--processing-fg",
-  "--failed-bg",
-  "--failed-fg",
-  "--offline-bg",
-  "--offline-fg",
-  "--unread-dot",
-  "--tab-badge",
-  "--insights",
-];
+function SignInScreen() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-const TYPE_ROWS = [
-  ["type-display", "Display 34/1.08/700"],
-  ["type-metric", "Metric 40"],
-  ["type-screen-title", "Screen title 27"],
-  ["type-section-title", "Section title 19"],
-  ["type-card-title", "Card title 16"],
-  ["type-body", "Body 15 — the quick brown fox jumps over the lazy dog."],
-  ["type-meta", "Meta 13 — supporting detail"],
-  ["type-chip", "CHIP 12"],
-  ["type-eyebrow", "EYEBROW 11"],
-  ["type-micro", "MICRO 10"],
-] as const;
+  useEffect(() => {
+    let active = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (active && data.session) navigate({ to: "/home", replace: true });
+    });
+    return () => {
+      active = false;
+    };
+  }, [navigate]);
 
-const RADII = [
-  ["--radius-pill", "Pills 999"],
-  ["--radius-card", "Cards 22"],
-  ["--radius-row", "Rows 20"],
-  ["--radius-tab", "Tab pill 18"],
-  ["--radius-button", "Buttons 14"],
-  ["--radius-thumb", "Thumbnails 12"],
-];
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setError(null);
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="flex flex-col gap-3">
-      <h2 className="type-eyebrow uppercase tracking-wide text-muted">{title}</h2>
-      {children}
-    </section>
-  );
-}
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
 
-function DesignSystemDemo() {
-  const [sheetFilter, setSheetFilter] = useState("All");
-  const [groundFilter, setGroundFilter] = useState("All");
-  const [photoKey, setPhotoKey] = useState(0);
+    if (signInError) {
+      setError(signInError.message);
+      setSubmitting(false);
+      return;
+    }
+
+    navigate({ to: "/home", replace: true });
+  }
 
   return (
     <main
-      className="mx-auto flex w-full flex-col gap-8 bg-sheet text-text"
+      className="flex min-h-screen flex-col bg-ground"
       style={{
-        maxWidth: "390px",
-        minHeight: "100dvh",
-        paddingTop: "calc(var(--safe-top) + 24px)",
-        paddingBottom: "calc(var(--safe-bottom) + 40px)",
-        paddingInline: "16px",
+        paddingTop: "calc(var(--safe-top) + 28px)",
+        paddingBottom: "calc(var(--safe-bottom) + 28px)",
+        paddingInline: "20px",
       }}
     >
-      <header className="flex flex-col gap-1">
-        <p className="type-eyebrow uppercase tracking-wide text-muted">Reference</p>
-        <h1 className="type-screen-title">Design system</h1>
-        <p className="type-meta text-muted">Every primitive, every state, at 390px.</p>
-      </header>
+      <h1 className="type-screen-title text-sheet">AutoStudio Lanka</h1>
 
-      <Section title="Colour tokens">
-        <ul className="grid grid-cols-3 gap-2">
-          {COLOR_TOKENS.map((token) => (
-            <li key={token} className="flex flex-col gap-1">
-              <span
-                className="block w-full"
-                style={{
-                  height: "40px",
-                  background: `var(${token})`,
-                  borderRadius: "var(--radius-thumb)",
-                  border: "1px solid var(--border)",
-                }}
-              />
-              <span className="type-micro text-muted">{token}</span>
-            </li>
-          ))}
-        </ul>
-      </Section>
+      <div className="mt-auto pt-10">
+        <p className="type-display text-sheet">
+          Your stock,
+          <br />
+          online today
+        </p>
 
-      <Section title="Type scale">
-        <div className="flex flex-col gap-3">
-          {TYPE_ROWS.map(([cls, label]) => (
-            <p key={cls} className={cls}>
-              {label}
-            </p>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Buttons">
-        <div className="flex flex-col gap-3">
-          <Button variant="primary" shape="block">
-            Primary
-          </Button>
-          <Button variant="secondary" shape="block">
-            Secondary
-          </Button>
-          <div className="flex items-center gap-3">
-            <Button variant="primary">Inline</Button>
-            <Button variant="secondary">Inline</Button>
-            <Button variant="icon" shape="round" aria-label="Round icon button">
-              ★
-            </Button>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="primary" disabled>
-              Disabled
-            </Button>
-            <Button variant="secondary" disabled>
-              Disabled
-            </Button>
-          </div>
-        </div>
-      </Section>
-
-      <Section title="Buttons on ground">
-        <div
-          className="flex flex-wrap items-center gap-3 bg-ground"
-          style={{ padding: "16px", borderRadius: "var(--radius-card)" }}
-        >
-          <Button variant="primary-on-ground">Primary</Button>
-          <Button variant="secondary-on-ground">Secondary</Button>
-          <Button variant="icon-on-ground" shape="round" aria-label="Round icon button on ground">
-            ★
-          </Button>
-        </div>
-      </Section>
-
-      <Section title="Status chips (static)">
-        <div className="flex flex-wrap gap-2">
-          <StatusChip tone="done">Done</StatusChip>
-          <StatusChip tone="processing">Processing</StatusChip>
-          <StatusChip tone="failed">Failed</StatusChip>
-          <StatusChip tone="offline">Offline</StatusChip>
-        </div>
-      </Section>
-
-      <Section title="Metadata chips">
-        <div className="flex flex-wrap gap-2">
-          <MetadataChip>2019</MetadataChip>
-          <MetadataChip>48,300 mi</MetadataChip>
-          <MetadataChip>Diesel</MetadataChip>
-          <MetadataChip>Automatic</MetadataChip>
-        </div>
-      </Section>
-
-      <Section title="Filter pills on sheet">
-        <div className="flex flex-wrap gap-2">
-          {["All", "Live", "Draft", "Sold"].map((label) => (
-            <FilterPill
-              key={label}
-              selected={sheetFilter === label}
-              onClick={() => setSheetFilter(label)}
-            >
-              {label}
-            </FilterPill>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Filter pills on ground">
-        <div
-          className="flex flex-wrap gap-2 bg-ground"
-          style={{ padding: "12px", borderRadius: "var(--radius-card)" }}
-        >
-          {["All", "Unread", "Replied"].map((label) => (
-            <FilterPill
-              key={label}
-              surface="ground"
-              selected={groundFilter === label}
-              onClick={() => setGroundFilter(label)}
-            >
-              {label}
-            </FilterPill>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Radii">
-        <ul className="grid grid-cols-3 gap-2">
-          {RADII.map(([token, label]) => (
-            <li key={token} className="flex flex-col gap-1">
-              <span
-                className="block w-full bg-surface-2"
-                style={{ height: "48px", borderRadius: `var(${token})` }}
-              />
-              <span className="type-micro text-muted">{label}</span>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section title="Elevation">
-        <div className="flex flex-col gap-4" style={{ paddingBottom: "8px" }}>
-          <div
-            className="type-meta bg-sheet text-text-2"
-            style={{
-              padding: "16px",
-              borderRadius: "var(--radius-card)",
-              boxShadow: "var(--shadow-sheet)",
-            }}
-          >
-            Sheet elevation
-          </div>
-          <div
-            className="type-meta bg-sheet text-text-2"
-            style={{
-              padding: "16px",
-              borderRadius: "var(--radius-card)",
-              boxShadow: "var(--shadow-bottom-bar)",
-            }}
-          >
-            Bottom bar elevation
-          </div>
-          <div
-            className="bg-ground"
-            style={{ padding: "16px", borderRadius: "var(--radius-card)" }}
-          >
-            <span
-              className="type-chip inline-flex items-center justify-center bg-raised-2 text-primary-on-ground"
+        <form className="mt-7 flex flex-col gap-3" onSubmit={handleSubmit}>
+          <label className="flex flex-col gap-2">
+            <span className="type-eyebrow text-muted-ground uppercase tracking-wide">Email</span>
+            <input
+              type="email"
+              autoComplete="email"
+              inputMode="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@dealership.lk"
+              className="type-body w-full bg-raised text-sheet placeholder:text-muted-ground outline-none"
               style={{
-                height: "var(--size-icon-button)",
-                width: "var(--size-icon-button)",
-                borderRadius: "var(--radius-pill)",
-                boxShadow: "var(--shadow-icon)",
+                minHeight: "var(--size-button)",
+                borderRadius: "var(--radius-button)",
+                paddingInline: "var(--space-button-x)",
               }}
-            >
-              ★
-            </span>
-          </div>
-        </div>
-      </Section>
+            />
+          </label>
 
-      <Section title="Motion">
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2">
-            {[0, 1, 2].map((i) => (
+          <label className="flex flex-col gap-2">
+            <span className="type-eyebrow text-muted-ground uppercase tracking-wide">Password</span>
+            <input
+              type="password"
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Your password"
+              className="type-body w-full bg-raised text-sheet placeholder:text-muted-ground outline-none"
+              style={{
+                minHeight: "var(--size-button)",
+                borderRadius: "var(--radius-button)",
+                paddingInline: "var(--space-button-x)",
+              }}
+            />
+          </label>
+
+          {error ? (
+            <p role="alert" className="type-meta text-destructive">
+              {error}
+            </p>
+          ) : null}
+
+          <Button
+            type="submit"
+            variant="primary-on-ground"
+            shape="block"
+            disabled={submitting}
+            className="mt-2"
+          >
+            {submitting ? (
               <span
-                key={i}
-                className="processing-pulse processing-pulse-stagger block bg-processing-bg"
-                style={
-                  {
-                    "--pulse-index": i,
-                    height: "32px",
-                    width: "56px",
-                    borderRadius: "var(--radius-thumb)",
-                  } as React.CSSProperties
-                }
+                aria-hidden
+                className="spinner"
+                style={{ height: "18px", width: "18px" }}
               />
-            ))}
-            <span className="type-micro text-muted">Processing pulse</span>
-          </div>
+            ) : null}
+            {submitting ? "Signing in" : "Sign in"}
+          </Button>
+        </form>
 
-          <div className="flex items-center gap-3">
-            <span
-              className="spinner block text-text-2"
-              style={{ height: "20px", width: "20px" }}
-            />
-            <span className="type-micro text-muted">Spinner</span>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span
-              key={photoKey}
-              className="photo-lands block bg-accent-soft"
-              style={{ height: "64px", width: "64px", borderRadius: "var(--radius-thumb)" }}
-            />
-            <Button variant="secondary" onClick={() => setPhotoKey((k) => k + 1)}>
-              Replay photo lands
-            </Button>
-          </div>
-
-          <p className="type-micro text-muted">
-            Press any button or pill for press feedback. Reduced motion is respected.
-          </p>
-        </div>
-      </Section>
+        <p className="type-meta text-muted-ground mt-4">
+          Forgotten your password? Reset it on the AutoStudio Lanka website, then sign in here.
+        </p>
+      </div>
     </main>
   );
 }
