@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 const cardSkin: Record<VehicleCardState, string> = {
   complete: "bg-surface text-text",
-  processing: "bg-processing-bg text-processing-fg",
+  processing: "bg-accent-soft text-primary-on-ground-fg",
   published_no_backgrounds: "bg-failed-bg text-failed-fg",
   no_photos: "bg-surface text-text",
   sold: "bg-offline-bg text-offline-fg",
