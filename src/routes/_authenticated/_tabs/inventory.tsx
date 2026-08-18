@@ -148,11 +148,11 @@ function InventoryScreen() {
       </section>
 
       <section
-        className="flex-1 bg-sheet text-text"
+        className="relative flex-1 bg-sheet text-text"
         style={{
           borderTopLeftRadius: "var(--radius-sheet)",
           borderTopRightRadius: "var(--radius-sheet)",
-          padding: "10px 20px 24px",
+          padding: "10px 20px 100px",
           transform: `translateY(${pull.distance}px)`,
           transition: pull.distance === 0 ? "transform 200ms ease-out" : "none",
         }}
@@ -223,21 +223,26 @@ function InventoryScreen() {
             visible.map((vehicle) => <VehicleCard key={vehicle.id} vehicle={vehicle} />)
           )}
         </div>
-
-        <div
-          className="sticky flex bg-sheet"
-          style={{ bottom: "0", paddingTop: "12px", marginTop: "4px" }}
-        >
-          <Link
-            to="/vehicle/new"
-            className="press type-card-title flex w-full items-center justify-center gap-2 bg-primary text-sheet"
-            style={{ borderRadius: "var(--radius-pill)", height: "60px" }}
-          >
-            <Plus size={20} strokeWidth={2.5} aria-hidden />
-            Add a vehicle
-          </Link>
-        </div>
       </section>
+
+      <div
+        className="fixed inset-x-0 z-20 bg-sheet"
+        style={{
+          bottom: "calc(75px + var(--safe-bottom))",
+          padding: "12px 20px 16px",
+          maxWidth: "var(--app-max-width, 100%)",
+          margin: "0 auto",
+        }}
+      >
+        <Link
+          to="/vehicle/new"
+          className="press type-card-title flex w-full items-center justify-center gap-2 bg-primary text-sheet"
+          style={{ borderRadius: "var(--radius-pill)", height: "60px" }}
+        >
+          <Plus size={20} strokeWidth={2.5} aria-hidden />
+          Add a vehicle
+        </Link>
+      </div>
     </>
   );
 }
