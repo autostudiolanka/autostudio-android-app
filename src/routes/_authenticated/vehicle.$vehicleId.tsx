@@ -202,19 +202,6 @@ function VehicleScreen() {
               </button>
             ) : null}
 
-            <div className="hidden">
-              <Button
-                shape="block"
-                variant={vehicle.isPublished ? "secondary" : "primary"}
-                style={{
-                  minHeight: "var(--size-button)",
-                  paddingInline: "var(--space-button-x)",
-                  borderRadius: "var(--radius-pill)",
-                }}
-              >
-                {vehicle.isPublished ? "View on website" : "Publish to website"}
-              </Button>
-            </div>
           </section>
         </>
       )}
