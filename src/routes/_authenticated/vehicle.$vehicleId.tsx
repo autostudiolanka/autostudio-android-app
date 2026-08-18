@@ -213,19 +213,6 @@ function VehicleScreen() {
               </Button>
             </div>
 
-            {false && [info.make].some(
-              (value) => !value,
-            ) ? (
-              <button
-                type="button"
-                onClick={() => navigate({ to: "/vehicle-info/$vehicleId", params: { vehicleId } })}
-                className="press type-body mt-3 w-full border border-dashed border-border-strong text-text-2"
-                style={{ borderRadius: "var(--radius-button)", padding: "14px 16px" }}
-              >
-                Complete info — some details are missing
-              </button>
-            ) : null}
-
           </section>
         </>
       )}
