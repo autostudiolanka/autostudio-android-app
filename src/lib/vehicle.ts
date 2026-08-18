@@ -233,7 +233,7 @@ export async function saveVehicleDetails(
   const merged = { ...(current?.details ?? {}), ...patch };
   const { error } = await supabase
     .from("car_jobs")
-    .update({ vehicle_details: merged })
+    .update({ vehicle_details: merged as never })
     .eq("id", vehicleId);
   if (error) throw error;
   return merged;

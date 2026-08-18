@@ -75,8 +75,8 @@ function str(value: unknown): string {
 
 function buildState(details: Record<string, unknown>): FormState {
   const info = normaliseDetails(details);
-  const features = Array.isArray(details.features)
-    ? (details.features as unknown[]).map((f) => str(f)).filter(Boolean)
+  const features = Array.isArray(details["features"])
+    ? (details["features"] as unknown[]).map((f) => str(f)).filter(Boolean)
     : [];
   return {
     make: info.make ?? "",
@@ -87,15 +87,15 @@ function buildState(details: Record<string, unknown>): FormState {
     fuel_type: info.fuel_type ?? "",
     transmission: info.transmission ?? "",
     body_type: info.body_type ?? "",
-    trim_level: str(details.trim_level) || info.variant || "",
+    trim_level: str(details["trim_level"]) || info.variant || "",
     engine_capacity: info.engine_capacity ?? "",
-    fuel_economy: str(details.fuel_economy),
-    owners: str(details.owners),
-    price: grouped(str(details.price)),
-    poa: details.price_on_application === true || details.poa === true,
+    fuel_economy: str(details["fuel_economy"]),
+    owners: str(details["owners"]),
+    price: grouped(str(details["price"])),
+    poa: details["price_on_application"] === true || details["poa"] === true,
     features,
-    service_history: str(details.service_history),
-    description: str(details.description) || info.description || "",
+    service_history: str(details["service_history"]),
+    description: str(details["description"]) || info.description || "",
   };
 }
 
@@ -153,11 +153,11 @@ function VehicleInfoScreen() {
     try {
       const patch: Record<string, unknown> = {};
       for (const field of BASICS) patch[field.key] = form[field.key].trim();
-      patch.price = digits(form.price);
-      patch.price_on_application = form.poa;
-      patch.features = form.features;
-      patch.service_history = form.service_history.trim();
-      patch.description = form.description.trim();
+      patch["price"] = digits(form.price);
+      patch["price_on_application"] = form.poa;
+      patch["features"] = form.features;
+      patch["service_history"] = form.service_history.trim();
+      patch["description"] = form.description.trim();
       await saveVehicleDetails(vehicleId, patch);
       setDirty(false);
       toast.success("Vehicle info saved");
