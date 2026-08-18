@@ -246,6 +246,7 @@
   --radius-tab: 18px;
   --radius-button: 14px;
   --radius-thumb: 12px;
+  --radius-sheet: 28px;
 
   /* Elevation ---------------------------------------------------------- */
   --shadow-sheet: 0 24px 60px rgba(20, 18, 10, 0.22);
