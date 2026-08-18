@@ -278,7 +278,9 @@
   --motion-pulse-stagger: 0.4s;
   --motion-spinner-duration: 1s;
   --motion-fade-duration: 200ms;
+  --motion-slide-up-duration: 400ms;
   --motion-ease: ease-in-out;
+  --motion-slide-up-ease: cubic-bezier(0.32, 0.72, 0, 1);
   --spinner-ring-width: 2px;
 
   /* Safe areas --------------------------------------------------------- */
@@ -292,8 +294,12 @@
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    background-color: var(--ground);
+    color: var(--sheet);
+  }
+
+  html {
+    font-family: var(--font-app);
   }
 }
 
@@ -350,6 +356,15 @@
 }
 
 /* Motion --------------------------------------------------------------- */
+@keyframes slide-up-screen {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 @keyframes processing-pulse {
   0%,
   100% {
@@ -382,6 +397,10 @@
 /* Stagger helper: set --pulse-index on each pulsing element. */
 @utility processing-pulse-stagger {
   animation-delay: calc(var(--pulse-index, 0) * var(--motion-pulse-stagger));
+}
+
+@utility slide-up-screen {
+  animation: slide-up-screen var(--motion-slide-up-duration) var(--motion-slide-up-ease) both;
 }
 
 @utility spinner {
@@ -424,8 +443,3 @@
   }
 }
 
-@layer base {
-  html {
-    font-family: var(--font-app);
-  }
-}

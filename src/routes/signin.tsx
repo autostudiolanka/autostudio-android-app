@@ -72,7 +72,7 @@ function SignInScreen() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col bg-ground">
+    <main className="fixed inset-0 flex flex-col bg-ground slide-up-screen overflow-y-auto">
       <div
         style={{
           paddingTop: "calc(var(--safe-top) + 16px)",
