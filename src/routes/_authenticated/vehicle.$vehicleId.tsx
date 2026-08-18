@@ -175,7 +175,11 @@ function VehicleScreen() {
               <Button
                 shape="block"
                 variant={vehicle.isPublished ? "secondary" : "primary"}
-                style={{ borderRadius: "var(--radius-pill)" }}
+                style={{
+                  minHeight: "var(--size-button)",
+                  paddingInline: "var(--space-button-x)",
+                  borderRadius: "var(--radius-pill)",
+                }}
               >
                 {vehicle.isPublished ? "View on website" : "Publish to website"}
               </Button>
