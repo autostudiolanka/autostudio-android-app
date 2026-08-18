@@ -148,21 +148,36 @@ export async function fetchInventory(): Promise<InventoryVehicle[]> {
   const rows = jobs ?? [];
   const ids = rows.map((row) => row.id);
 
-  let publishedByJob = new Map<string, { imagingStatus: ImagingStatus; isPublished: boolean }>();
+  let publishedByJob = new Map<
+    string,
+    { imagingStatus: ImagingStatus; isPublished: boolean; photoUrls: string[]; working: number }
+  >();
   if (ids.length > 0) {
     const { data: published, error: publishedError } = await supabase
       .from("published_vehicles")
-      .select("car_job_id, imaging_status, is_published")
+      .select("car_job_id, imaging_status, is_published, manual_photo_pairs, manual_photo_urls")
       .in("car_job_id", ids);
     if (publishedError) throw publishedError;
     publishedByJob = new Map(
-      (published ?? []).map((row) => [
-        row.car_job_id,
-        {
-          imagingStatus: (row.imaging_status ?? "none") as ImagingStatus,
-          isPublished: Boolean(row.is_published),
-        },
-      ]),
+      (published ?? []).map((row) => {
+        const pairs = Array.isArray(row.manual_photo_pairs)
+          ? (row.manual_photo_pairs as Array<Record<string, unknown>>)
+          : [];
+        const photoUrls = pairs.length
+          ? pairs
+              .map((p) => (p["processedUrl"] as string) || (p["originalUrl"] as string) || "")
+              .filter(Boolean)
+          : ((row.manual_photo_urls ?? []) as string[]).filter(Boolean);
+        return [
+          row.car_job_id,
+          {
+            imagingStatus: (row.imaging_status ?? "none") as ImagingStatus,
+            isPublished: Boolean(row.is_published),
+            photoUrls,
+            working: pairs.filter((p) => p["processing"] === true).length,
+          },
+        ] as const;
+      }),
     );
   }
 
@@ -175,6 +190,9 @@ export async function fetchInventory(): Promise<InventoryVehicle[]> {
     );
     const publishedRow = publishedByJob.get(row.id);
     const details = asDetails(row.vehicle_details);
+    const fallbackUrls = publishedRow?.photoUrls ?? [];
+    const photosDone = done.length > 0 ? done.length : fallbackUrls.length;
+    const photosWorking = working.length > 0 ? working.length : (publishedRow?.working ?? 0);
 
     return {
       id: row.id,
@@ -183,15 +201,15 @@ export async function fetchInventory(): Promise<InventoryVehicle[]> {
       createdAt: row.created_at,
       soldAt: row.sold_at,
       details,
-      photosDone: done.length,
-      photosTotal: photoSlots.length,
-      photosWorking: working.length,
-      thumbnailUrl: done.length > 0 ? slotUrl(done[0]!) : null,
+      photosDone,
+      photosTotal: photoSlots.length > 0 ? photoSlots.length : fallbackUrls.length,
+      photosWorking,
+      thumbnailUrl: done.length > 0 ? slotUrl(done[0]!) : (fallbackUrls[0] ?? null),
       imagingStatus: publishedRow?.imagingStatus ?? null,
       isPublished: publishedRow?.isPublished ?? false,
       state: deriveState({
         soldAt: row.sold_at,
-        photosDone: done.length,
+        photosDone,
         imagingStatus: publishedRow?.imagingStatus ?? null,
         isPublished: publishedRow?.isPublished ?? false,
       }),
