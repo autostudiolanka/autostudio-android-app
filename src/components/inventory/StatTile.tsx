@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -8,21 +7,19 @@ export function StatTile({
   title,
   chip,
   tone,
-  to,
-  search,
+  onClick,
 }: {
   title: ReactNode;
   chip: string;
   tone: "done" | "failed";
-  to: string;
-  search?: Record<string, string>;
+  onClick: () => void;
 }) {
   return (
-    <Link
-      to={to}
-      search={search as never}
+    <button
+      type="button"
+      onClick={onClick}
       className={cn(
-        "press flex flex-1 flex-col justify-between",
+        "press flex flex-1 flex-col justify-between text-left",
         tone === "done" ? "bg-done-bg text-done-fg" : "bg-failed-bg text-failed-fg",
       )}
       style={{ borderRadius: "var(--radius-card)", padding: "16px", minHeight: "132px" }}
@@ -47,6 +44,6 @@ export function StatTile({
           <ChevronRight size={18} strokeWidth={2.5} />
         </span>
       </span>
-    </Link>
+    </button>
   );
 }
