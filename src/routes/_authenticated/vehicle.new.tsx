@@ -1,5 +1,10 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+
+import { Button } from "@/components/primitives/Button";
+import { createVehicle } from "@/lib/capture";
 
 export const Route = createFileRoute("/_authenticated/vehicle/new")({
   head: () => ({
@@ -15,8 +20,42 @@ export const Route = createFileRoute("/_authenticated/vehicle/new")({
   component: AddVehicleScreen,
 });
 
+/** Sri Lankan plates: letters, digits and a single dash, uppercase. */
+function formatPlate(value: string): string {
+  return value
+    .toUpperCase()
+    .replace(/[^A-Z0-9-]/g, "")
+    .slice(0, 12);
+}
+
 function AddVehicleScreen() {
   const router = useRouter();
+  const navigate = useNavigate();
+  const [registration, setRegistration] = useState("");
+  const [make, setMake] = useState("");
+  const [model, setModel] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const valid = registration.trim().length >= 4 && make.trim() !== "" && model.trim() !== "";
+
+  const submit = async () => {
+    if (!valid) return;
+    setSaving(true);
+    try {
+      const vehicle = await createVehicle({ registration, make, model });
+      navigate({ to: "/capture/$vehicleId", params: { vehicleId: vehicle.id }, replace: true });
+    } catch (error) {
+      toast.error((error as Error).message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const fieldStyle = {
+    borderRadius: "var(--radius-button)",
+    padding: "13px 14px",
+    minHeight: "var(--size-button)",
+  } as const;
 
   return (
     <div className="flex min-h-screen flex-col bg-ground">
@@ -45,12 +84,57 @@ function AddVehicleScreen() {
         style={{
           borderTopLeftRadius: "var(--radius-sheet)",
           borderTopRightRadius: "var(--radius-sheet)",
-          padding: "24px 20px",
+          padding: "24px 20px calc(var(--safe-bottom) + 24px)",
         }}
       >
-        <p className="type-body text-muted">
-          Photo capture and vehicle details are coming in the next step.
-        </p>
+        <label className="type-meta block text-muted" htmlFor="registration">
+          Registration
+        </label>
+        <input
+          id="registration"
+          value={registration}
+          onChange={(event) => setRegistration(formatPlate(event.target.value))}
+          placeholder="CAB-1234"
+          autoCapitalize="characters"
+          className="type-card-title mt-2 w-full bg-surface-2 uppercase text-text outline-none placeholder:text-placeholder"
+          style={fieldStyle}
+        />
+
+        <label className="type-meta mt-5 block text-muted" htmlFor="make">
+          Make
+        </label>
+        <input
+          id="make"
+          value={make}
+          onChange={(event) => setMake(event.target.value)}
+          placeholder="Toyota"
+          className="type-card-title mt-2 w-full bg-surface-2 text-text outline-none placeholder:text-placeholder"
+          style={fieldStyle}
+        />
+
+        <label className="type-meta mt-5 block text-muted" htmlFor="model">
+          Model
+        </label>
+        <input
+          id="model"
+          value={model}
+          onChange={(event) => setModel(event.target.value)}
+          placeholder="Corolla"
+          className="type-card-title mt-2 w-full bg-surface-2 text-text outline-none placeholder:text-placeholder"
+          style={fieldStyle}
+        />
+
+        <div className="mt-8">
+          <Button
+            shape="block"
+            variant="primary"
+            disabled={!valid || saving}
+            onClick={submit}
+            style={{ borderRadius: "var(--radius-pill)" }}
+          >
+            {saving ? "Creating…" : "Next: take photos"}
+          </Button>
+        </div>
       </section>
     </div>
   );

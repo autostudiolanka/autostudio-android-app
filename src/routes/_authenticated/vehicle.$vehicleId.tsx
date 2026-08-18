@@ -202,6 +202,17 @@ function VehicleScreen() {
               </button>
             ) : null}
 
+            <div className="mt-3">
+              <Button
+                shape="block"
+                variant="secondary"
+                onClick={() => navigate({ to: "/capture/$vehicleId", params: { vehicleId } })}
+                style={{ borderRadius: "var(--radius-pill)" }}
+              >
+                Image vehicle
+              </Button>
+            </div>
+
           </section>
         </>
       )}
