@@ -219,7 +219,11 @@ function SignInScreen() {
             shape="block"
             disabled={submitting}
             className="mt-5"
-            style={{ borderRadius: "var(--radius-pill)" }}
+            style={{
+              minHeight: "var(--size-button)",
+              paddingInline: "var(--space-button-x)",
+              borderRadius: "var(--radius-pill)",
+            }}
           >
             {submitting ? (
               <span aria-hidden className="spinner" style={{ height: "18px", width: "18px" }} />
