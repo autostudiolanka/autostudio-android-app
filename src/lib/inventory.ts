@@ -63,7 +63,7 @@ function slotUrl(slot: PhotoSlot): string | null {
   return url && url.length > 0 ? url : null;
 }
 
-function asDetails(value: unknown): VehicleDetails {
+export function asDetails(value: unknown): VehicleDetails {
   if (!value || typeof value !== "object") return {};
   const raw = value as Record<string, unknown>;
   const text = (v: unknown): string | null => {
