@@ -20,6 +20,7 @@ import { Route as AuthenticatedTabsHomeRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedTabsInventoryRouteImport } from './routes/_authenticated/_tabs/inventory'
 import { Route as AuthenticatedTabsSettingsRouteImport } from './routes/_authenticated/_tabs/settings'
 import { Route as AuthenticatedVehicleVehicleIdRouteImport } from './routes/_authenticated/vehicle.$vehicleId'
+import { Route as AuthenticatedVehicleNewRouteImport } from './routes/_authenticated/vehicle.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -79,6 +80,11 @@ const AuthenticatedVehicleVehicleIdRoute =
     path: '/vehicle/$vehicleId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedVehicleNewRoute = AuthenticatedVehicleNewRouteImport.update({
+  id: '/vehicle/new',
+  path: '/vehicle/new',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/inventory': typeof AuthenticatedTabsInventoryRoute
   '/settings': typeof AuthenticatedTabsSettingsRoute
   '/vehicle/$vehicleId': typeof AuthenticatedVehicleVehicleIdRoute
+  '/vehicle/new': typeof AuthenticatedVehicleNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/inventory': typeof AuthenticatedTabsInventoryRoute
   '/settings': typeof AuthenticatedTabsSettingsRoute
   '/vehicle/$vehicleId': typeof AuthenticatedVehicleVehicleIdRoute
+  '/vehicle/new': typeof AuthenticatedVehicleNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/_authenticated/_tabs/inventory': typeof AuthenticatedTabsInventoryRoute
   '/_authenticated/_tabs/settings': typeof AuthenticatedTabsSettingsRoute
   '/_authenticated/vehicle/$vehicleId': typeof AuthenticatedVehicleVehicleIdRoute
+  '/_authenticated/vehicle/new': typeof AuthenticatedVehicleNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/settings'
     | '/vehicle/$vehicleId'
+    | '/vehicle/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/settings'
     | '/vehicle/$vehicleId'
+    | '/vehicle/new'
   id:
     | '__root__'
     | '/'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_tabs/inventory'
     | '/_authenticated/_tabs/settings'
     | '/_authenticated/vehicle/$vehicleId'
+    | '/_authenticated/vehicle/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -240,6 +252,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVehicleVehicleIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/vehicle/new': {
+      id: '/_authenticated/vehicle/new'
+      path: '/vehicle/new'
+      fullPath: '/vehicle/new'
+      preLoaderRoute: typeof AuthenticatedVehicleNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -267,12 +286,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedTabsRouteRoute: typeof AuthenticatedTabsRouteRouteWithChildren
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedVehicleVehicleIdRoute: typeof AuthenticatedVehicleVehicleIdRoute
+  AuthenticatedVehicleNewRoute: typeof AuthenticatedVehicleNewRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTabsRouteRoute: AuthenticatedTabsRouteRouteWithChildren,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedVehicleVehicleIdRoute: AuthenticatedVehicleVehicleIdRoute,
+  AuthenticatedVehicleNewRoute: AuthenticatedVehicleNewRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
