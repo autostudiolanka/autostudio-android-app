@@ -278,7 +278,9 @@
   --motion-pulse-stagger: 0.4s;
   --motion-spinner-duration: 1s;
   --motion-fade-duration: 200ms;
+  --motion-slide-up-duration: 400ms;
   --motion-ease: ease-in-out;
+  --motion-slide-up-ease: cubic-bezier(0.32, 0.72, 0, 1);
   --spinner-ring-width: 2px;
 
   /* Safe areas --------------------------------------------------------- */
@@ -350,7 +352,16 @@
 }
 
 /* Motion --------------------------------------------------------------- */
-@keyframes processing-pulse {
+@keyframes slide-up-screen {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframe processing-pulse {
   0%,
   100% {
     opacity: 0.3;
