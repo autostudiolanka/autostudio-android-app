@@ -145,11 +145,13 @@ export async function fetchEnquiries(): Promise<Enquiry[]> {
 }
 
 export async function markReplied(id: string, viaWhatsApp: boolean): Promise<void> {
-  const patch: Record<string, unknown> = {
-    status: "replied",
-    responded_at: new Date().toISOString(),
-  };
-  if (viaWhatsApp) patch["whatsapp_sent"] = true;
-  const { error } = await supabase.from("enquiries").update(patch).eq("id", id);
+  const { error } = await supabase
+    .from("enquiries")
+    .update({
+      status: "replied",
+      responded_at: new Date().toISOString(),
+      ...(viaWhatsApp ? { whatsapp_sent: true } : {}),
+    })
+    .eq("id", id);
   if (error) throw error;
 }
