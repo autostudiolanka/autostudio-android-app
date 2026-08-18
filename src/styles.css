@@ -269,6 +269,21 @@
   --space-filter-pill-x: 15px;
   --space-button-x: 20px;
 
+  /* Bottom tab bar ----------------------------------------------------- */
+  --tabbar-pad-top: 4px;
+  --tabbar-pad-x: 12px;
+  --tabbar-pad-bottom: 14px;
+  --tabbar-gap: 4px;
+  --tabitem-pad-top: 9px;
+  --tabitem-pad-bottom: 7px;
+  --tabitem-gap: 5px;
+  --tabitem-icon: 24px;
+  --tab-badge-size: 10px;
+  --tab-badge-ring: 2px;
+  --tab-badge-top: 8px;
+  --tab-badge-right: 32px;
+  --tab-press-overlay: rgba(0, 0, 0, 0.06);
+
   /* Motion ------------------------------------------------------------- */
   --motion-press-scale: 0.94;
   --motion-press-duration: 150ms;
