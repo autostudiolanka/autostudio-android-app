@@ -5,6 +5,126 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
+ * Design system.
+ * Every colour, size, radius, shadow and duration used by components is a
+ * custom property declared here. Components must never inline raw values.
+ */
+
+:root {
+  /* Colour ------------------------------------------------------------- */
+  --ground: #0e0e10;
+  --raised: #1c1c20;
+  --raised-2: #33333a;
+  --sheet: #ffffff;
+  --surface: #f6f6f8;
+  --surface-2: #f2f2f4;
+  --border: #e6e6ea;
+  --border-strong: #c9c9d0;
+  --text: #0e0e10;
+  --text-2: #3a3a40;
+  --muted: #6e6e76;
+  --muted-dark: #8a8a92;
+  --muted-ground: #9a9aa2;
+  --placeholder: #a0a0a8;
+  --primary: #0e0e10;
+  --primary-on-ground: #8de0f7;
+  --primary-on-ground-fg: #0b1b21;
+  --accent-soft: #cfedf8;
+  --destructive: #c2411f;
+  --destructive-fg: #ffffff;
+  --done-bg: #a7efd0;
+  --done-fg: #0f3d2a;
+  --processing-bg: #fff3c4;
+  --processing-fg: #4a3200;
+  --failed-bg: #f7c6b0;
+  --failed-fg: #17110d;
+  --offline-bg: #e6e6ea;
+  --offline-fg: #3a3a40;
+  --unread-dot: #8de0f7;
+  --tab-badge: #35c77a;
+  --insights: #6e86a8;
+
+  /* Type --------------------------------------------------------------- */
+  --font-app: "DM Sans", "Noto Sans", "Segoe UI", Roboto, system-ui, sans-serif;
+
+  --text-display-size: 34px;
+  --text-display-line: 1.08;
+  --text-display-weight: 700;
+  --text-metric-size: 40px;
+  --text-metric-line: 1;
+  --text-metric-weight: 700;
+  --text-screen-title-size: 27px;
+  --text-screen-title-line: 1.1;
+  --text-screen-title-weight: 700;
+  --text-section-title-size: 19px;
+  --text-section-title-line: 1;
+  --text-section-title-weight: 700;
+  --text-card-title-size: 16px;
+  --text-card-title-line: 1.1;
+  --text-card-title-weight: 700;
+  --text-body-size: 15px;
+  --text-body-line: 1.4;
+  --text-body-weight: 400;
+  --text-meta-size: 13px;
+  --text-meta-line: 1.2;
+  --text-meta-weight: 400;
+  --text-chip-size: 12px;
+  --text-chip-line: 1;
+  --text-chip-weight: 500;
+  --text-eyebrow-size: 11px;
+  --text-eyebrow-line: 1;
+  --text-eyebrow-weight: 500;
+  --text-micro-size: 10px;
+  --text-micro-line: 1.1;
+  --text-micro-weight: 500;
+
+  /* Radii -------------------------------------------------------------- */
+  --radius-pill: 999px;
+  --radius-card: 22px;
+  --radius-row: 20px;
+  --radius-tab: 18px;
+  --radius-button: 14px;
+  --radius-thumb: 12px;
+
+  /* Elevation ---------------------------------------------------------- */
+  --shadow-sheet: 0 24px 60px rgba(20, 18, 10, 0.22);
+  --shadow-bottom-bar: 0 -8px 32px rgba(0, 0, 0, 0.28);
+  --shadow-icon: 0 1px 3px rgba(0, 0, 0, 0.6);
+
+  /* Sizing ------------------------------------------------------------- */
+  --size-touch: 44px;
+  --size-status-chip: 26px;
+  --size-metadata-chip: 33px;
+  --size-filter-pill: 34px;
+  --size-button: 48px;
+  --size-icon-button: 44px;
+
+  --space-status-chip-y: 7px;
+  --space-status-chip-x: 10px;
+  --space-metadata-chip-y: 10px;
+  --space-metadata-chip-x: 13px;
+  --space-filter-pill-y: 11px;
+  --space-filter-pill-x: 15px;
+  --space-button-x: 20px;
+
+  /* Motion ------------------------------------------------------------- */
+  --motion-press-scale: 0.94;
+  --motion-press-duration: 150ms;
+  --motion-pill-press-scale: 0.92;
+  --motion-pill-press-duration: 120ms;
+  --motion-pulse-duration: 1.5s;
+  --motion-pulse-stagger: 0.4s;
+  --motion-spinner-duration: 1s;
+  --motion-fade-duration: 200ms;
+  --motion-ease: ease-in-out;
+  --spinner-ring-width: 2px;
+
+  /* Safe areas --------------------------------------------------------- */
+  --safe-bottom: max(env(safe-area-inset-bottom), 0px);
+  --safe-top: env(safe-area-inset-top);
+}
+
+/*
  * Design system definition.
  *
  * The @theme inline block maps CSS custom properties to Tailwind utility
@@ -19,6 +139,37 @@
  */
 
 @theme inline {
+  --font-sans: var(--font-app);
+
+  --color-ground: var(--ground);
+  --color-raised: var(--raised);
+  --color-raised-2: var(--raised-2);
+  --color-sheet: var(--sheet);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border-subtle: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-muted: var(--muted);
+  --color-muted-dark: var(--muted-dark);
+  --color-muted-ground: var(--muted-ground);
+  --color-placeholder: var(--placeholder);
+  --color-primary-on-ground: var(--primary-on-ground);
+  --color-primary-on-ground-fg: var(--primary-on-ground-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-done-bg: var(--done-bg);
+  --color-done-fg: var(--done-fg);
+  --color-processing-bg: var(--processing-bg);
+  --color-processing-fg: var(--processing-fg);
+  --color-failed-bg: var(--failed-bg);
+  --color-failed-fg: var(--failed-fg);
+  --color-offline-bg: var(--offline-bg);
+  --color-offline-fg: var(--offline-fg);
+  --color-unread-dot: var(--unread-dot);
+  --color-tab-badge: var(--tab-badge);
+  --color-insights: var(--insights);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
