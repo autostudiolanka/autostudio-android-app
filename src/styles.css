@@ -294,3 +294,136 @@
     color: var(--color-foreground);
   }
 }
+
+/* Typography utilities ------------------------------------------------- */
+@utility type-display {
+  font-size: var(--text-display-size);
+  line-height: var(--text-display-line);
+  font-weight: var(--text-display-weight);
+}
+@utility type-metric {
+  font-size: var(--text-metric-size);
+  line-height: var(--text-metric-line);
+  font-weight: var(--text-metric-weight);
+}
+@utility type-screen-title {
+  font-size: var(--text-screen-title-size);
+  line-height: var(--text-screen-title-line);
+  font-weight: var(--text-screen-title-weight);
+}
+@utility type-section-title {
+  font-size: var(--text-section-title-size);
+  line-height: var(--text-section-title-line);
+  font-weight: var(--text-section-title-weight);
+}
+@utility type-card-title {
+  font-size: var(--text-card-title-size);
+  line-height: var(--text-card-title-line);
+  font-weight: var(--text-card-title-weight);
+}
+@utility type-body {
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line);
+  font-weight: var(--text-body-weight);
+}
+@utility type-meta {
+  font-size: var(--text-meta-size);
+  line-height: var(--text-meta-line);
+  font-weight: var(--text-meta-weight);
+}
+@utility type-chip {
+  font-size: var(--text-chip-size);
+  line-height: var(--text-chip-line);
+  font-weight: var(--text-chip-weight);
+}
+@utility type-eyebrow {
+  font-size: var(--text-eyebrow-size);
+  line-height: var(--text-eyebrow-line);
+  font-weight: var(--text-eyebrow-weight);
+}
+@utility type-micro {
+  font-size: var(--text-micro-size);
+  line-height: var(--text-micro-line);
+  font-weight: var(--text-micro-weight);
+}
+
+/* Motion --------------------------------------------------------------- */
+@keyframes processing-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes photo-lands {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@utility processing-pulse {
+  animation: processing-pulse var(--motion-pulse-duration) var(--motion-ease) infinite;
+}
+
+/* Stagger helper: set --pulse-index on each pulsing element. */
+@utility processing-pulse-stagger {
+  animation-delay: calc(var(--pulse-index, 0) * var(--motion-pulse-stagger));
+}
+
+@utility spinner {
+  border: var(--spinner-ring-width) solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--radius-pill);
+  animation: spinner-rotate var(--motion-spinner-duration) linear infinite;
+}
+
+@utility photo-lands {
+  animation: photo-lands var(--motion-fade-duration) ease-out both;
+}
+
+/* Press feedback (touch only, no hover states) */
+@utility press {
+  transition: transform var(--motion-press-duration) ease-out;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  &:active {
+    transform: scale(var(--motion-press-scale));
+  }
+}
+
+@utility press-pill {
+  transition: transform var(--motion-pill-press-duration) ease-out;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  &:active {
+    transform: scale(var(--motion-pill-press-scale));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer base {
+  html {
+    font-family: var(--font-app);
+  }
+}
