@@ -361,7 +361,7 @@
   }
 }
 
-@keyframe processing-pulse {
+@keyframes processing-pulse {
   0%,
   100% {
     opacity: 0.3;
