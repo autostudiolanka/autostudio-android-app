@@ -6,7 +6,7 @@ import { FilterPill } from "@/components/primitives/FilterPill";
 import { MetadataChip } from "@/components/primitives/MetadataChip";
 import { StatusChip } from "@/components/primitives/StatusChip";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/design")({
   head: () => ({
     meta: [
       { title: "Design System — Stock & Enquiries App" },
