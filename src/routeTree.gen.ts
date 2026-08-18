@@ -19,6 +19,7 @@ import { Route as AuthenticatedTabsEnquiriesRouteImport } from './routes/_authen
 import { Route as AuthenticatedTabsHomeRouteImport } from './routes/_authenticated/_tabs/home'
 import { Route as AuthenticatedTabsInventoryRouteImport } from './routes/_authenticated/_tabs/inventory'
 import { Route as AuthenticatedTabsSettingsRouteImport } from './routes/_authenticated/_tabs/settings'
+import { Route as AuthenticatedVehicleInfoVehicleIdRouteImport } from './routes/_authenticated/vehicle-info.$vehicleId'
 import { Route as AuthenticatedVehicleVehicleIdRouteImport } from './routes/_authenticated/vehicle.$vehicleId'
 import { Route as AuthenticatedVehicleNewRouteImport } from './routes/_authenticated/vehicle.new'
 
@@ -74,6 +75,12 @@ const AuthenticatedTabsSettingsRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedTabsRouteRoute,
   } as any)
+const AuthenticatedVehicleInfoVehicleIdRoute =
+  AuthenticatedVehicleInfoVehicleIdRouteImport.update({
+    id: '/vehicle-info/$vehicleId',
+    path: '/vehicle-info/$vehicleId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedVehicleVehicleIdRoute =
   AuthenticatedVehicleVehicleIdRouteImport.update({
     id: '/vehicle/$vehicleId',
@@ -95,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthenticatedTabsHomeRoute
   '/inventory': typeof AuthenticatedTabsInventoryRoute
   '/settings': typeof AuthenticatedTabsSettingsRoute
+  '/vehicle-info/$vehicleId': typeof AuthenticatedVehicleInfoVehicleIdRoute
   '/vehicle/$vehicleId': typeof AuthenticatedVehicleVehicleIdRoute
   '/vehicle/new': typeof AuthenticatedVehicleNewRoute
 }
@@ -107,6 +115,7 @@ export interface FileRoutesByTo {
   '/home': typeof AuthenticatedTabsHomeRoute
   '/inventory': typeof AuthenticatedTabsInventoryRoute
   '/settings': typeof AuthenticatedTabsSettingsRoute
+  '/vehicle-info/$vehicleId': typeof AuthenticatedVehicleInfoVehicleIdRoute
   '/vehicle/$vehicleId': typeof AuthenticatedVehicleVehicleIdRoute
   '/vehicle/new': typeof AuthenticatedVehicleNewRoute
 }
@@ -122,6 +131,7 @@ export interface FileRoutesById {
   '/_authenticated/_tabs/home': typeof AuthenticatedTabsHomeRoute
   '/_authenticated/_tabs/inventory': typeof AuthenticatedTabsInventoryRoute
   '/_authenticated/_tabs/settings': typeof AuthenticatedTabsSettingsRoute
+  '/_authenticated/vehicle-info/$vehicleId': typeof AuthenticatedVehicleInfoVehicleIdRoute
   '/_authenticated/vehicle/$vehicleId': typeof AuthenticatedVehicleVehicleIdRoute
   '/_authenticated/vehicle/new': typeof AuthenticatedVehicleNewRoute
 }
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/inventory'
     | '/settings'
+    | '/vehicle-info/$vehicleId'
     | '/vehicle/$vehicleId'
     | '/vehicle/new'
   fileRoutesByTo: FileRoutesByTo
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/inventory'
     | '/settings'
+    | '/vehicle-info/$vehicleId'
     | '/vehicle/$vehicleId'
     | '/vehicle/new'
   id:
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_tabs/home'
     | '/_authenticated/_tabs/inventory'
     | '/_authenticated/_tabs/settings'
+    | '/_authenticated/vehicle-info/$vehicleId'
     | '/_authenticated/vehicle/$vehicleId'
     | '/_authenticated/vehicle/new'
   fileRoutesById: FileRoutesById
@@ -245,6 +258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTabsSettingsRouteImport
       parentRoute: typeof AuthenticatedTabsRouteRoute
     }
+    '/_authenticated/vehicle-info/$vehicleId': {
+      id: '/_authenticated/vehicle-info/$vehicleId'
+      path: '/vehicle-info/$vehicleId'
+      fullPath: '/vehicle-info/$vehicleId'
+      preLoaderRoute: typeof AuthenticatedVehicleInfoVehicleIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/vehicle/$vehicleId': {
       id: '/_authenticated/vehicle/$vehicleId'
       path: '/vehicle/$vehicleId'
@@ -285,6 +305,7 @@ const AuthenticatedTabsRouteRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedTabsRouteRoute: typeof AuthenticatedTabsRouteRouteWithChildren
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedVehicleInfoVehicleIdRoute: typeof AuthenticatedVehicleInfoVehicleIdRoute
   AuthenticatedVehicleVehicleIdRoute: typeof AuthenticatedVehicleVehicleIdRoute
   AuthenticatedVehicleNewRoute: typeof AuthenticatedVehicleNewRoute
 }
@@ -292,6 +313,8 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTabsRouteRoute: AuthenticatedTabsRouteRouteWithChildren,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedVehicleInfoVehicleIdRoute:
+    AuthenticatedVehicleInfoVehicleIdRoute,
   AuthenticatedVehicleVehicleIdRoute: AuthenticatedVehicleVehicleIdRoute,
   AuthenticatedVehicleNewRoute: AuthenticatedVehicleNewRoute,
 }
