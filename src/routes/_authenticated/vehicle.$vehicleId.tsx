@@ -188,6 +188,33 @@ function VehicleScreen() {
                 {vehicle.isPublished ? "View on website" : "Publish to website"}
               </Button>
             </div>
+
+            {[info.make, info.model, info.year, info.mileage, info.fuel_type, info.transmission].some(
+              (value) => !value,
+            ) ? (
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/vehicle-info/$vehicleId", params: { vehicleId } })}
+                className="press type-body mt-3 w-full border border-dashed border-border-strong text-text-2"
+                style={{ borderRadius: "var(--radius-button)", padding: "14px 16px" }}
+              >
+                Complete info — some details are missing
+              </button>
+            ) : null}
+
+            <div className="hidden">
+              <Button
+                shape="block"
+                variant={vehicle.isPublished ? "secondary" : "primary"}
+                style={{
+                  minHeight: "var(--size-button)",
+                  paddingInline: "var(--space-button-x)",
+                  borderRadius: "var(--radius-pill)",
+                }}
+              >
+                {vehicle.isPublished ? "View on website" : "Publish to website"}
+              </Button>
+            </div>
           </section>
         </>
       )}
