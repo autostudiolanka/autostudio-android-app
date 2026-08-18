@@ -13,7 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as DesignRouteImport } from './routes/design'
 import { Route as SigninRouteImport } from './routes/signin'
-import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedTabsRouteRouteImport } from './routes/_authenticated/_tabs/route'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedTabsEnquiriesRouteImport } from './routes/_authenticated/_tabs/enquiries'
+import { Route as AuthenticatedTabsHomeRouteImport } from './routes/_authenticated/_tabs/home'
+import { Route as AuthenticatedTabsInventoryRouteImport } from './routes/_authenticated/_tabs/inventory'
+import { Route as AuthenticatedTabsSettingsRouteImport } from './routes/_authenticated/_tabs/settings'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,23 +39,59 @@ const SigninRoute = SigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
-  id: '/home',
-  path: '/home',
+const AuthenticatedTabsRouteRoute = AuthenticatedTabsRouteRouteImport.update({
+  id: '/_tabs',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedTabsEnquiriesRoute =
+  AuthenticatedTabsEnquiriesRouteImport.update({
+    id: '/enquiries',
+    path: '/enquiries',
+    getParentRoute: () => AuthenticatedTabsRouteRoute,
+  } as any)
+const AuthenticatedTabsHomeRoute = AuthenticatedTabsHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AuthenticatedTabsRouteRoute,
+} as any)
+const AuthenticatedTabsInventoryRoute =
+  AuthenticatedTabsInventoryRouteImport.update({
+    id: '/inventory',
+    path: '/inventory',
+    getParentRoute: () => AuthenticatedTabsRouteRoute,
+  } as any)
+const AuthenticatedTabsSettingsRoute =
+  AuthenticatedTabsSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedTabsRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/design': typeof DesignRoute
   '/signin': typeof SigninRoute
-  '/home': typeof AuthenticatedHomeRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/enquiries': typeof AuthenticatedTabsEnquiriesRoute
+  '/home': typeof AuthenticatedTabsHomeRoute
+  '/inventory': typeof AuthenticatedTabsInventoryRoute
+  '/settings': typeof AuthenticatedTabsSettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/design': typeof DesignRoute
   '/signin': typeof SigninRoute
-  '/home': typeof AuthenticatedHomeRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/enquiries': typeof AuthenticatedTabsEnquiriesRoute
+  '/home': typeof AuthenticatedTabsHomeRoute
+  '/inventory': typeof AuthenticatedTabsInventoryRoute
+  '/settings': typeof AuthenticatedTabsSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,20 +99,46 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/design': typeof DesignRoute
   '/signin': typeof SigninRoute
-  '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/_tabs': typeof AuthenticatedTabsRouteRouteWithChildren
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/_tabs/enquiries': typeof AuthenticatedTabsEnquiriesRoute
+  '/_authenticated/_tabs/home': typeof AuthenticatedTabsHomeRoute
+  '/_authenticated/_tabs/inventory': typeof AuthenticatedTabsInventoryRoute
+  '/_authenticated/_tabs/settings': typeof AuthenticatedTabsSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/design' | '/signin' | '/home'
+  fullPaths:
+    | '/'
+    | '/design'
+    | '/signin'
+    | '/notifications'
+    | '/enquiries'
+    | '/home'
+    | '/inventory'
+    | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/design' | '/signin' | '/home'
+  to:
+    | '/'
+    | '/design'
+    | '/signin'
+    | '/notifications'
+    | '/enquiries'
+    | '/home'
+    | '/inventory'
+    | '/settings'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/design'
     | '/signin'
-    | '/_authenticated/home'
+    | '/_authenticated/_tabs'
+    | '/_authenticated/notifications'
+    | '/_authenticated/_tabs/enquiries'
+    | '/_authenticated/_tabs/home'
+    | '/_authenticated/_tabs/inventory'
+    | '/_authenticated/_tabs/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -111,22 +178,79 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/home': {
-      id: '/_authenticated/home'
+    '/_authenticated/_tabs': {
+      id: '/_authenticated/_tabs'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedTabsRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/_tabs/enquiries': {
+      id: '/_authenticated/_tabs/enquiries'
+      path: '/enquiries'
+      fullPath: '/enquiries'
+      preLoaderRoute: typeof AuthenticatedTabsEnquiriesRouteImport
+      parentRoute: typeof AuthenticatedTabsRouteRoute
+    }
+    '/_authenticated/_tabs/home': {
+      id: '/_authenticated/_tabs/home'
       path: '/home'
       fullPath: '/home'
-      preLoaderRoute: typeof AuthenticatedHomeRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      preLoaderRoute: typeof AuthenticatedTabsHomeRouteImport
+      parentRoute: typeof AuthenticatedTabsRouteRoute
+    }
+    '/_authenticated/_tabs/inventory': {
+      id: '/_authenticated/_tabs/inventory'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof AuthenticatedTabsInventoryRouteImport
+      parentRoute: typeof AuthenticatedTabsRouteRoute
+    }
+    '/_authenticated/_tabs/settings': {
+      id: '/_authenticated/_tabs/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedTabsSettingsRouteImport
+      parentRoute: typeof AuthenticatedTabsRouteRoute
     }
   }
 }
 
+interface AuthenticatedTabsRouteRouteChildren {
+  AuthenticatedTabsEnquiriesRoute: typeof AuthenticatedTabsEnquiriesRoute
+  AuthenticatedTabsHomeRoute: typeof AuthenticatedTabsHomeRoute
+  AuthenticatedTabsInventoryRoute: typeof AuthenticatedTabsInventoryRoute
+  AuthenticatedTabsSettingsRoute: typeof AuthenticatedTabsSettingsRoute
+}
+
+const AuthenticatedTabsRouteRouteChildren: AuthenticatedTabsRouteRouteChildren =
+  {
+    AuthenticatedTabsEnquiriesRoute: AuthenticatedTabsEnquiriesRoute,
+    AuthenticatedTabsHomeRoute: AuthenticatedTabsHomeRoute,
+    AuthenticatedTabsInventoryRoute: AuthenticatedTabsInventoryRoute,
+    AuthenticatedTabsSettingsRoute: AuthenticatedTabsSettingsRoute,
+  }
+
+const AuthenticatedTabsRouteRouteWithChildren =
+  AuthenticatedTabsRouteRoute._addFileChildren(
+    AuthenticatedTabsRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedTabsRouteRoute: typeof AuthenticatedTabsRouteRouteWithChildren
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedTabsRouteRoute: AuthenticatedTabsRouteRouteWithChildren,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
