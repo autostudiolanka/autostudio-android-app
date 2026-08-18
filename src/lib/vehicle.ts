@@ -204,3 +204,37 @@ export async function fetchVehicle(vehicleId: string): Promise<VehicleDetail | n
     imagingStatus: published?.imaging_status ?? null,
   };
 }
+export async function fetchVehicleForm(vehicleId: string): Promise<{
+  id: string;
+  registration: string | null;
+  details: Record<string, unknown>;
+} | null> {
+  const { data, error } = await supabase
+    .from("car_jobs")
+    .select("id, registration, vehicle_details")
+    .eq("id", vehicleId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  const details =
+    data.vehicle_details && typeof data.vehicle_details === "object" && !Array.isArray(data.vehicle_details)
+      ? (data.vehicle_details as Record<string, unknown>)
+      : {};
+  return { id: data.id, registration: data.registration, details };
+}
+
+/** Merges patch into the existing jsonb so keys the website relies on survive. */
+export async function saveVehicleDetails(
+  vehicleId: string,
+  patch: Record<string, unknown>,
+): Promise<Record<string, unknown>> {
+  const current = await fetchVehicleForm(vehicleId);
+  const merged = { ...(current?.details ?? {}), ...patch };
+  const { error } = await supabase
+    .from("car_jobs")
+    .update({ vehicle_details: merged })
+    .eq("id", vehicleId);
+  if (error) throw error;
+  return merged;
+}
