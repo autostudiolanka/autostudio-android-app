@@ -294,8 +294,12 @@
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    background-color: var(--ground);
+    color: var(--sheet);
+  }
+
+  html {
+    font-family: var(--font-app);
   }
 }
 
